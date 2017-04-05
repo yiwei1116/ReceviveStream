@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -5,7 +6,7 @@ import java.util.List;
 /**
  * Created by yiwei on 2017/4/4.
  */
-public class Reconstruct {
+public class Reconstruct implements Serializable {
     public static List<Integer> reConstruct(String decode){
         int base = 200;
         int diff ;

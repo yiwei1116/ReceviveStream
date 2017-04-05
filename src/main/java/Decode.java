@@ -1,11 +1,12 @@
 import com.esotericsoftware.minlog.Log;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Created by yiwei on 2017/4/4.
  */
-public class Decode {
+public class Decode implements Serializable {
     static Map<Integer,String> decodeDictionary = new HashMap<Integer,String>();
     static int dictionaryMaxSize = 4096;
     /** Decompress a list of output ks to a string. */
@@ -167,9 +168,19 @@ public class Decode {
 
 
 
+        ArrayList<Integer>decodeNum = new ArrayList<Integer>();
 
+        for (int j = 0 ; j < streaming.length();j+=12){
 
+            decodeNum.add(Integer.parseInt(streaming.substring(j,j+12),2));
+            Log.error("tt",String.valueOf(Integer.parseInt(streaming.substring(j,j+12),2)));
 
+        }
 
+        return decodeNum;
     }
+
+
+
+
 }

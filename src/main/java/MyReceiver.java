@@ -11,7 +11,8 @@ public class MyReceiver extends Receiver<String> {
 
     String host = null;
     int port = -1;
-
+    Decode decode = new Decode();
+    Reconstruct reConstruct = new Reconstruct();
     public MyReceiver(String host_ , int port_) {
         super(StorageLevel.MEMORY_AND_DISK_2());
         host = host_;
@@ -47,6 +48,7 @@ public class MyReceiver extends Receiver<String> {
             // Until stopped or connection broken continue reading
             while (!isStopped() && (userInput = reader.readLine()) != null) {
                 System.out.println("Receive data :" + userInput );
+                System.out.println("recover origin data :" + reConstruct.reConstruct(decode.decompress(decode.binary12bitToInteger(userInput))));
 
                 store(userInput);
             }
