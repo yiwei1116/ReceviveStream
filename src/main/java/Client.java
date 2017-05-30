@@ -23,26 +23,8 @@ public class Client {
         JavaReceiverInputDStream<String> lines = javaStreamingContext.receiverStream(new MyReceiver("localhost",9999));
 
         JavaDStream<String> splitWord = lines.flatMap(s -> Arrays.asList(s.split(" ")).iterator());
-        splitWord.foreachRDD(new Function<JavaRDD<String>, Void>() {
-            public Void call(JavaRDD<String> rdd) throws Exception {
-                List<Integer> DecNum = new ArrayList<Integer>();
-                if (rdd != null) {
-                    List<String> result = rdd.collect();
+        JavaDStream<Integer> transferDec =splitWord.map(s -> Integer.parseInt(s,2));
 
-
-                    for (String s : result) {
-
-                        //  DecNum.add(Integer.parseInt(s, 2));
-
-
-                    }
-
-                }
-
-                //  return DecNum;
-                return null;
-            }}
-        ;
 
         javaStreamingContext.start();
         javaStreamingContext.awaitTermination();

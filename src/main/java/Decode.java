@@ -175,31 +175,10 @@ public class Decode implements Serializable {
                 System.out.print("["+"Key:"+key+" , "+"Code:"+value+"]"+"\n");*/
 
         }
-<<<<<<< HEAD
-=======
+
         return result.toString();
     }
-    public static ArrayList<Integer> binary12bitToInteger(String streaming){
-       // streaming.subSequence()
 
-
-
-        ArrayList<Integer>decodeNum = new ArrayList<Integer>();
-
-        for (int j = 0 ; j < streaming.length();j+=12){
-
-            decodeNum.add(Integer.parseInt(streaming.substring(j,j+12),2));
-            Log.error("tt",String.valueOf(Integer.parseInt(streaming.substring(j,j+12),2)));
->>>>>>> 7a6095e17851302b7a70f60e7690d9441c345107
-
-        }
-
-<<<<<<< HEAD
-        return result.toString();
-=======
-        return decodeNum;
->>>>>>> 7a6095e17851302b7a70f60e7690d9441c345107
-    }
 
 
 
