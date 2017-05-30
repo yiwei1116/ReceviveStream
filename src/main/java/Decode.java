@@ -7,19 +7,33 @@ import java.util.*;
  */
 public class Decode {
     static Map<Integer,String> decodeDictionary = new HashMap<Integer,String>();
-    static int dictionaryMaxSize = 4096;
+    static int dictionaryMaxSize = 1024;
     /** Decompress a list of output ks to a string. */
     public static String decompress(List<Integer> compressed) {
         // Build the decodeDictionary.
 
-        LRUCache<Integer, String> lruCache = new LRUCache<Integer, String>(4096);
+        LRUCache<Integer, String> lruCache = new LRUCache<Integer, String>(dictionaryMaxSize);
         String delruTable="";
-        int dictSize = 256;
+        int dictSize = 52;
 
-        for (int i = 0; i < 256; i++)
-            decodeDictionary.put(i, "" + (char)i);
+        /*for (int i = 0; i < 256; i++)
+            decodeDictionary.put(i, "" + (char)i);*/
+/**
+ *  A~Z 0~25
+ */
+        for (int i = 65; i < 91; i++) {
+            decodeDictionary.put((i-65), "" + (char) i);
 
-        String w = "" + (char)(int)compressed.remove(0);
+        }
+
+/**
+ *  a~z 26~51
+ */
+        for (int i = 97; i < 123; i++) {
+            decodeDictionary.put( (i-71), "" + (char) i);
+
+        }
+        String w = "" + decodeDictionary.get(compressed.remove(0));
         StringBuffer result = new StringBuffer(w);
         for (int k : compressed) {
 
@@ -87,7 +101,7 @@ public class Decode {
                         }
                     }
                     List<Map.Entry> entryList = new ArrayList<>(hashMap.entrySet());
-                    Comparator< Map.Entry> sortByValue = (e1, e2)->{
+                    Comparator< Map.Entry> sortByValue = (e1,e2)->{
                         return ((String)e1.getValue()).compareTo( (String)e2.getValue());
                     };
                     Collections.sort(entryList, sortByValue );
@@ -160,16 +174,8 @@ public class Decode {
                 System.out.print("["+"Key:"+key+" , "+"Code:"+value+"]"+"\n");*/
 
         }
+
+
         return result.toString();
-    }
-    public static ArrayList<Integer> binary12bitToInteger(String streaming){
-       // streaming.subSequence()
-
-
-
-
-
-
-
     }
 }

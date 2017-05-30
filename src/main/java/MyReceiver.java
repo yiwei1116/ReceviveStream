@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyReceiver extends Receiver<String> {
 
@@ -37,6 +39,9 @@ public class MyReceiver extends Receiver<String> {
         Socket socket = null;
         String userInput = null;
         BufferedReader reader = null;
+        List<Integer> compressList = new ArrayList<>();
+        String decompressString="";
+        List<Integer> reConstruct = new ArrayList<>();
         try {
             // connect to the server
             socket = new Socket(host, port);
@@ -47,7 +52,15 @@ public class MyReceiver extends Receiver<String> {
             // Until stopped or connection broken continue reading
             while (!isStopped() && (userInput = reader.readLine()) != null) {
                 System.out.println("Receive data :" + userInput );
-
+        /*        if(userInput.length()>12)
+                {
+                for(int i=0; i < userInput.length()-10; i+=10){
+                compressList.add(Integer.parseInt(userInput.substring(i,i+10),2));
+                }
+                decompressString = Decode.decompress(compressList);
+                reConstruct = Reconstruct.reConstruct(decompressString);
+                System.out.println("reConstruct :" + compressList );
+                }*/
                 store(userInput);
             }
             reader.close();
