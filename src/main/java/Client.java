@@ -2,6 +2,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.VoidFunction;
+import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.streaming.*;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
@@ -23,11 +24,12 @@ public class Client {
         SparkConf sparkConf = new SparkConf().setMaster("local[*]").setAppName("receive");
         JavaStreamingContext javaStreamingContext = new JavaStreamingContext(sparkConf, Durations.seconds(5));
         //JavaDStream<String> stream = javaStreamingContext.textFileStream("/home/yiwei/IdeaProjects/FPro/PubNub.txt").cache();
-        JavaReceiverInputDStream<String> lines = javaStreamingContext.receiverStream(new MyReceiver("localhost",9999));
-
-        JavaDStream<String> splitWord = lines.flatMap(s -> Arrays.asList(s.split(" ")).iterator());
+     //   JavaReceiverInputDStream<String> lines = javaStreamingContext.receiverStream(new MyReceiver("localhost",9999));
+        JavaDStream<String>StreamInput = MQTTUtils.createStream(javaStreamingContext,"tcp://localhost:9999","sensor", StorageLevel.MEMORY_AND_DISK_SER());
+        JavaDStream<String> splitWord = StreamInput.flatMap(s -> Arrays.asList(s.split(" ")).iterator());
         JavaDStream<Integer> transferDec =splitWord.map(binary -> Integer.parseInt(binary,2));
-       transferDec.foreachRDD(new VoidFunction<JavaRDD<Integer>>() {
+        transferDec.print();
+   /*    transferDec.foreachRDD(new VoidFunction<JavaRDD<Integer>>() {
            @Override
            public void call(JavaRDD<Integer> rdd) throws Exception {
                rdd.foreach(new VoidFunction<Integer>() {
@@ -41,11 +43,11 @@ public class Client {
                });
            }
 
-       });
+       });*/
 
         //transferDec.print();
-        deString = Decode.decompress(compressList);
-        System.out.println(deString);
+        /*deString = Decode.decompress(compressList);
+        System.out.println(deString);*/
         javaStreamingContext.start();
         javaStreamingContext.awaitTermination();
     }
