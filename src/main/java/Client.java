@@ -25,7 +25,8 @@ public class Client {
         JavaStreamingContext javaStreamingContext = new JavaStreamingContext(sparkConf, Durations.seconds(5));
         //JavaDStream<String> stream = javaStreamingContext.textFileStream("/home/yiwei/IdeaProjects/FPro/PubNub.txt").cache();
      //   JavaReceiverInputDStream<String> lines = javaStreamingContext.receiverStream(new MyReceiver("localhost",9999));
-        JavaDStream<String>StreamInput = MQTTUtils.createStream(javaStreamingContext,"tcp://localhost:9999","sensor", StorageLevel.MEMORY_AND_DISK_SER());
+        JavaDStream<String>StreamInput = MQTTUtils.createStream(javaStreamingContext,"tcp://localhost:1883","sensor", StorageLevel.MEMORY_AND_DISK_SER());
+
         JavaDStream<String> splitWord = StreamInput.flatMap(s -> Arrays.asList(s.split(" ")).iterator());
         JavaDStream<Integer> transferDec =splitWord.map(binary -> Integer.parseInt(binary,2));
         transferDec.print();
