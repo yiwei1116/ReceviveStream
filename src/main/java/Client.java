@@ -29,6 +29,7 @@ public class Client {
 
         JavaDStream<String> splitWord = StreamInput.flatMap(s -> Arrays.asList(s.split(" ")).iterator());
         JavaDStream<Integer> transferDec =splitWord.map(binary -> Integer.parseInt(binary,2));
+
         transferDec.print();
    /*    transferDec.foreachRDD(new VoidFunction<JavaRDD<Integer>>() {
            @Override

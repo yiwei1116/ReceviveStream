@@ -1,7 +1,11 @@
+import java.util
+
 import org.apache.spark.SparkConf
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.mqtt.MQTTUtils
 import org.apache.spark.streaming.{Seconds, StreamingContext}
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * Created by steve02 on 2017/6/2.
@@ -28,9 +32,17 @@ object MQTTWordCount {
     val ssc = new StreamingContext(sparkConf, Seconds(2))
     val lines = MQTTUtils.createStream(ssc, brokerUrl, topic, StorageLevel.MEMORY_ONLY_SER_2)
     val words = lines.flatMap(x => x.split(" "))
-    val wordCounts = words.map(x => (x, 1)).reduceByKey(_ + _)
+    val transform = words.map(binary => Integer.parseInt(binary, 2))
+    val arr = new util.ArrayList[Integer]()
+    transform.foreachRDD {
+      arr +: _.collect() //you can now put it in an array or d w/e you want with it
 
-    wordCounts.print()
+    }
+    while (arr.size()>=1){
+    val  compress = transform.map(Decode.decompress(arr))
+      compress.print()
+    }
+    transform.print()
     ssc.start()
     ssc.awaitTermination()
   }
